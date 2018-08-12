@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import AceEditor from 'react-ace';
 import 'brace/mode/java';
 import 'brace/theme/monokai';
+import 'brace/snippets/java';
+import 'brace/ext/language_tools';
+// TODO: Figure out elegant imports for theme and language
 
 export default class Editor extends Component {
 
@@ -10,7 +13,9 @@ export default class Editor extends Component {
         this.state={
             language: 'java',
             theme: 'monokai',
-            keyboardHandler: 'normal'
+            keyboardHandler: 'normal',
+            width: props.width,
+            height: props.height
         };
     }
     
@@ -18,20 +23,28 @@ export default class Editor extends Component {
         // implement API logic here
     }
 
+    componentWillMount() {
+        this.setState({width: window.innerWidth, height: window.innerHeight});
+    }
+
     render() {
+        let {language, theme, keyboardHandler, width, height} = this.state;
         return(
             <AceEditor
-                mode={this.state.language}
-                theme={this.state.theme}
-                keyboardHandler={this.state.keyboardHandler}
+                mode={language}
+                theme={theme}
+                keyboardHandler={keyboardHandler}
                 onChange={this.onChange}
-                editorProps={{$blockScrolling: true}}
+                editorProps={{$blockScrolling: Infinity}}
                 showGutter={true}
+                width={width}
+                height={height}
                 setOptions={{
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true,
                     enableSnippets: true,
-                    showLineNumbers: true,}}
+                    showLineNumbers: true,
+                }}    
             />
         );
     }
