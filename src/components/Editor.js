@@ -30,22 +30,30 @@ export default class Editor extends Component {
     render() {
         let {language, theme, keyboardHandler, width, height} = this.state;
         return(
-            <AceEditor
-                mode={language}
-                theme={theme}
-                keyboardHandler={keyboardHandler}
-                onChange={this.onChange}
-                editorProps={{$blockScrolling: Infinity}}
-                showGutter={true}
-                width={width}
-                height={height}
-                setOptions={{
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    enableSnippets: true,
-                    showLineNumbers: true,
-                }}    
-            />
+            <div style={wrapper}>
+                Hello
+                <AceEditor
+                    style={{alignItems: 'flex-end', justifyContent: 'flex-end'}}
+                    mode={language}
+                    theme={theme}
+                    keyboardHandler={keyboardHandler}
+                    onChange={this.onChange}
+                    editorProps={{$blockScrolling: Infinity}}
+                    showGutter={true}
+                    width={width}
+                    height={height}
+                    setOptions={{
+                        enableBasicAutocompletion: true,
+                        enableLiveAutocompletion: true,
+                        enableSnippets: true,
+                        showLineNumbers: true,
+                    }}    
+                />
+            </div>
         );
     }
+}
+
+const wrapper={
+    display: 'flex',
 }
