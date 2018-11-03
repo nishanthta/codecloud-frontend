@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import AceEditor from 'react-ace';
 import 'brace/mode/java';
 import 'brace/theme/monokai';
@@ -6,7 +6,10 @@ import 'brace/snippets/java';
 import 'brace/ext/language_tools';
 // TODO: Figure out elegant imports for theme and language
 
-export default class Editor extends Component {
+export default class Editor extends React.Component {
+
+    static cursorChanged = false;
+    static textChanged = false;
 
     constructor(props) {
         super(props);
@@ -17,10 +20,36 @@ export default class Editor extends Component {
             width: props.width,
             height: props.height
         };
+        this.onChange = this.onChange.bind(this);
+        this.onCursorChange = this.onCursorChange.bind(this);
+    }
+
+    onCursorChange = ({anchor}) => {
+        console.log('Row: ' + JSON.stringify(anchor.row));
+        console.log('Column: ' + JSON.stringify(anchor.column));
+        Editor.cursorChanged = true;
+        this.changeListener();
     }
     
-    onChange(newValue) {
-        // implement API logic here
+    onChange = (newValue) => {
+        console.log(newValue);
+        Editor.textChanged = true;
+        this.changeListener();
+    }
+
+    changeListener() {
+        console.log(Editor.textChanged);
+        console.log(Editor.cursorChanged);
+        if (Editor.textChanged && Editor.cursorChanged) {
+            console.log('sending data');
+            this.sendData();
+        }
+    }
+
+    sendData() {
+        console.log('Api calls here');
+        Editor.textChanged = false;
+        Editor.cursorChanged = false;
     }
 
     componentWillMount() {
@@ -38,6 +67,7 @@ export default class Editor extends Component {
                     theme={theme}
                     keyboardHandler={keyboardHandler}
                     onChange={this.onChange}
+                    onCursorChange={this.onCursorChange}
                     editorProps={{$blockScrolling: Infinity}}
                     showGutter={true}
                     width={width}
